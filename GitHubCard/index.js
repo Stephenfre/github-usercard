@@ -46,6 +46,76 @@ const followersArray = [];
 
 */
 
+const gitUsers = document.querySelector(".cards");
+
+const cardUsers = [
+  "stephenfre",
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell"
+];
+
+function userCards(profileCards) {
+  const card = document.createElement("div"),
+    imgCard = document.createElement("img"),
+    cardInfo = document.createElement("div"),
+    cardName = document.createElement("h3"),
+    cardUserName = document.createElement("p"),
+    cardLocation = document.createElement("p"),
+    cardProfile = document.createElement("p"),
+    cardLink = document.createElement("a"),
+    cardFollower = document.createElement("p"),
+    cardFollowing = document.createElement("p"),
+    cardBio = document.createElement("p");
+
+  // **** CREATE STRUCTURE **** //
+
+  card.appendChild(imgCard);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(cardName);
+  cardInfo.appendChild(cardUserName);
+  cardInfo.appendChild(cardLocation);
+  cardInfo.appendChild(cardProfile);
+  cardProfile.appendChild(cardLink);
+  cardInfo.appendChild(cardFollower);
+  cardInfo.appendChild(cardFollowing);
+  cardInfo.appendChild(cardBio);
+
+  // **** SET THE CONTENT **** //
+  imgCard.src = profileCards.avatar_url;
+  cardName.textContent = profileCards.name;
+  cardUserName.textContent = profileCards.login;
+  cardLocation.textContent = `Location: ${profileCards.location}`;
+  cardLink.setAttribute("href", profileCards.html_url);
+  cardLink.textContent = profileCards.html_url;
+  cardProfile.textContent = `Profile: `;
+  cardFollower.textContent = `Followers: ${profileCards.followers}`;
+  cardFollowing.textContent = `Following: ${profileCards.following}`;
+  cardBio.textContent = `Bio: ${profileCards.bio}`;
+
+  // **** APPLY THE STYLES **** //
+  card.classList.add("card");
+  cardInfo.classList.add("card-info");
+  cardName.classList.add("name");
+  cardUserName.classList.add("username");
+
+  return card;
+}
+
+cardUsers.forEach(user => {
+  axios
+    .get(`https://api.github.com/users/${user}`)
+    .then(res => {
+      const newData = res.data;
+      gitUsers.appendChild(userCards(newData));
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
